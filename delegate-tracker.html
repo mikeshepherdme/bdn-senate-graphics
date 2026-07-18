@@ -264,6 +264,30 @@
   .bdn-badge-alternate { background: #e9f0ea; color: #2d5a3d; }
   .bdn-badge-none { background: #f0f0ee; color: #888; }
 
+  .bdn-view-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+  .bdn-toggle-btn {
+    flex: 1 1 0;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2d5a3d;
+    background: #e9f0ea;
+    border: 1px solid #d6ddd6;
+    border-radius: 6px;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+  .bdn-toggle-btn:hover { background: #dde9de; }
+  .bdn-toggle-btn.bdn-toggle-active {
+    background: #2d5a3d;
+    color: #fff;
+    border-color: #2d5a3d;
+  }
+
   .bdn-source {
     font-size: 10.5px;
     color: #777;
@@ -361,38 +385,56 @@
     </div>
   </div>
 
-  <div class="bdn-hero">
-    <div class="bdn-hero-num">80 of 601</div>
-    <div class="bdn-hero-label">convention seats decided so far (13%)</div>
-    <div class="bdn-hero-sublabel">4 of 16 counties fully reported</div>
+  <div class="bdn-view-toggle" role="tablist">
+    <button type="button" class="bdn-toggle-btn bdn-toggle-active" id="bdn-tab-statewide" role="tab" aria-selected="true" onclick="bdnShowView('statewide')">Statewide</button>
+    <button type="button" class="bdn-toggle-btn" id="bdn-tab-county" role="tab" aria-selected="false" onclick="bdnShowView('county')">By county &amp; lookup</button>
   </div>
 
-  <div class="bdn-chart">
-    <h4>Elected delegates by candidate</h4>
-    <div id="bdn-bars"></div>
+  <div id="bdn-view-statewide">
+    <div class="bdn-hero">
+      <div class="bdn-hero-num">80 of 601</div>
+      <div class="bdn-hero-label">convention seats decided so far (13%)</div>
+      <div class="bdn-hero-sublabel">4 of 16 counties fully reported</div>
+    </div>
+
+    <div class="bdn-chart">
+      <h4>Elected delegates by candidate</h4>
+      <div id="bdn-bars"></div>
+    </div>
+
+    <div class="bdn-zero-note">
+      <strong>Also elected as delegates:</strong> Kleban (0), Costello (0), Dickerson (0), Cote (0), Leveille (0), Libby (0), Pelletier (0), Webb (0).
+    </div>
+
+    <div class="bdn-zero-note">
+      <strong>Alternates elected so far (not counted above):</strong> Uncommitted (8), Bellows (4), Jackson (3), Shah (2).
+    </div>
   </div>
 
-  <div class="bdn-zero-note">
-    <strong>Also elected as delegates:</strong> Kleban (0), Costello (0), Dickerson (0), Cote (0), Leveille (0), Libby (0), Pelletier (0), Webb (0).
+  <div id="bdn-view-county" style="display:none">
+    <div class="bdn-section-title">Delegates elected by county</div>
+    <div id="bdn-counties"></div>
+
+    <div class="bdn-section-title">Look up a delegate</div>
+    <input type="text" id="bdn-search" class="bdn-search-input" placeholder="Search by name or town&hellip;" autocomplete="off">
+    <div class="bdn-search-hint">Searches all 3,732 people who filed to run as a delegate, not just winners.</div>
+    <div id="bdn-search-results" class="bdn-search-results"></div>
   </div>
-
-  <div class="bdn-zero-note">
-    <strong>Alternates elected so far (not counted above):</strong> Uncommitted (8), Bellows (4), Jackson (3), Shah (2).
-  </div>
-
-  <div class="bdn-section-title">Delegates elected by county</div>
-  <div id="bdn-counties"></div>
-
-  <div class="bdn-section-title">Look up a delegate</div>
-  <input type="text" id="bdn-search" class="bdn-search-input" placeholder="Search by name or town&hellip;" autocomplete="off">
-  <div class="bdn-search-hint">Searches all 3,732 people who filed to run as a delegate, not just winners.</div>
-  <div id="bdn-search-results" class="bdn-search-results"></div>
 
   <p class="bdn-source">Source: Bangor Daily News tabulation of county caucus results certified by the Maine Democratic Party.</p>
 
 </div>
 
 <script>
+  function bdnShowView(view) {
+    document.getElementById('bdn-view-statewide').style.display = view === 'statewide' ? '' : 'none';
+    document.getElementById('bdn-view-county').style.display = view === 'county' ? '' : 'none';
+    document.getElementById('bdn-tab-statewide').classList.toggle('bdn-toggle-active', view === 'statewide');
+    document.getElementById('bdn-tab-county').classList.toggle('bdn-toggle-active', view === 'county');
+    document.getElementById('bdn-tab-statewide').setAttribute('aria-selected', String(view === 'statewide'));
+    document.getElementById('bdn-tab-county').setAttribute('aria-selected', String(view === 'county'));
+  }
+
   var SCALE_MAX = 20; // axis runs 0-20% of the convention's 601 total seats
 
   var bdnResults = [
