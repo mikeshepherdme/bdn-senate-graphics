@@ -659,6 +659,22 @@
     if (e.key === 'Escape') bdnCloseModal();
   });
 
+  // ---- Report height to the parent page so an embedding <iframe> can auto-resize ----
+  (function() {
+    if (window.self === window.top) return; // not embedded, nothing to report to
+    var widget = document.querySelector('.bdn-tracker-widget');
+    function sendHeight() {
+      var height = Math.ceil(widget.getBoundingClientRect().height) + 4;
+      window.parent.postMessage({ type: 'bdn-iframe-resize', height: height }, '*');
+    }
+    if (window.ResizeObserver) {
+      new ResizeObserver(sendHeight).observe(widget);
+    } else {
+      window.addEventListener('resize', sendHeight);
+    }
+    window.addEventListener('load', sendHeight);
+    sendHeight();
+  })();
 </script>
 
 </body>
