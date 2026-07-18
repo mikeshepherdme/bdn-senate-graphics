@@ -19,7 +19,7 @@
   .bdn-tracker-widget * { box-sizing: border-box; }
   .bdn-logo-badge {
     position: absolute;
-    top: -14px;
+    bottom: -14px;
     right: -14px;
     width: 34px;
     height: 34px;
@@ -28,7 +28,7 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.25);
   }
   @media (max-width: 480px) {
-    .bdn-logo-badge { width: 28px; height: 28px; top: -12px; right: -12px; }
+    .bdn-logo-badge { width: 28px; height: 28px; bottom: -12px; right: -12px; }
   }
 
   .bdn-header {
@@ -414,9 +414,8 @@
       <span class="bdn-info-wrap">
         <button class="bdn-info-btn" type="button" aria-label="Methodology" aria-expanded="false" aria-controls="bdn-info-box" onclick="bdnToggleInfo(this)">i</button>
         <div id="bdn-info-box" class="bdn-info-box" role="tooltip">
-          <p>A delegate is counted here only once their county's official results list them as an elected regular delegate -- not an alternate. Alternates are tracked separately below, since they only get a convention vote if a regular delegate can't attend.</p>
-          <p>A delegate's candidate is whichever Senate hopeful they endorsed in their filed candidacy statement, or the campaign whose official slate they ran on. Results come from each county's certified vote count (ElectionBuddy reports or the state party's posted results).</p>
-          <p>This is a rolling count -- early counties to report are not necessarily representative of the full 601-seat outcome.</p>
+          <p>A delegate is counted here once their county's official results list them as an elected regular delegate.</p>
+          <p>A delegate's candidate is whichever Senate hopeful they endorsed in their filed candidacy statement or the campaign whose official slate they ran on. People on no slate or on more than one slate are labeled as uncommitted unless they have told us who they are supporting.</p>
         </div>
       </span>
     </div>
