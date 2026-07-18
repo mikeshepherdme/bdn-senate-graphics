@@ -192,34 +192,102 @@
     color: #2d5a3d;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    margin: 1.1rem 0 10px;
+    margin: 0.7rem 0 8px;
   }
-  .bdn-county-row { margin-bottom: 8px; }
-  .bdn-county-row:last-child { margin-bottom: 0; }
+  .bdn-section-title:first-child { margin-top: 0; }
+  .bdn-county-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 0.9rem;
+  }
   .bdn-county-btn {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
     width: 100%;
     background: #f4f6f4;
     border: 1px solid #d6ddd6;
-    border-radius: 6px;
-    padding: 9px 12px;
+    border-radius: 5px;
+    padding: 6px 9px;
     margin: 0;
     font: inherit;
     text-align: left;
     cursor: pointer;
     color: inherit;
   }
+  .bdn-county-btn:hover { background: #ebefe9; }
   .bdn-county-btn:focus-visible { outline: 2px solid #2d5a3d; outline-offset: 1px; }
-  .bdn-county-toprow {
+  .bdn-county-name { font-size: 12.5px; font-weight: 600; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bdn-county-value { font-size: 11px; color: #555; white-space: nowrap; flex-shrink: 0; }
+  .bdn-county-value.bdn-county-done { color: #2d5a3d; font-weight: 600; }
+
+  .bdn-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .bdn-modal-backdrop.bdn-modal-open { display: flex; }
+  .bdn-modal-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #d6ddd6;
+    max-width: 420px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  .bdn-modal-header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 8px;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    border-bottom: 2px solid #2d5a3d;
   }
-  .bdn-county-name { font-size: 13.5px; font-weight: 600; color: #1a1a1a; }
-  .bdn-county-value { font-size: 12.5px; color: #555; white-space: nowrap; }
-  .bdn-county-value.bdn-county-done { color: #2d5a3d; font-weight: 600; }
-  .bdn-county-wrap { position: relative; display: block; }
+  .bdn-modal-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .bdn-modal-subtitle { font-size: 11.5px; color: #666; margin-top: 2px; }
+  .bdn-modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    color: #777;
+    cursor: pointer;
+    padding: 2px 4px;
+    flex-shrink: 0;
+  }
+  .bdn-modal-close:hover { color: #1a1a1a; }
+  .bdn-modal-body { padding: 10px 16px 16px; overflow-y: auto; }
+  .bdn-modal-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2d5a3d;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 10px 0 4px;
+  }
+  .bdn-modal-group-title:first-child { margin-top: 0; }
+  .bdn-modal-person {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 1px solid #f0f0ee;
+  }
+  .bdn-modal-person:last-child { border-bottom: none; }
+  .bdn-modal-person-name { color: #1a1a1a; }
+  .bdn-modal-person-cand { color: #555; white-space: nowrap; }
+  .bdn-modal-empty { font-size: 13px; color: #777; padding: 6px 0; }
 
   .bdn-search-input {
     width: 100%;
@@ -412,8 +480,8 @@
   </div>
 
   <div id="bdn-view-county" style="display:none">
-    <div class="bdn-section-title">Delegates elected by county</div>
-    <div id="bdn-counties"></div>
+    <div class="bdn-section-title">Tap a county to see its delegates</div>
+    <div id="bdn-counties" class="bdn-county-grid"></div>
 
     <div class="bdn-section-title">Look up a delegate</div>
     <input type="text" id="bdn-search" class="bdn-search-input" placeholder="Search by name or town&hellip;" autocomplete="off">
@@ -422,6 +490,19 @@
   </div>
 
   <p class="bdn-source">Source: Bangor Daily News tabulation of county caucus results certified by the Maine Democratic Party.</p>
+
+  <div class="bdn-modal-backdrop" id="bdn-modal-backdrop" onclick="if (event.target === this) bdnCloseModal();">
+    <div class="bdn-modal-card" role="dialog" aria-modal="true" aria-labelledby="bdn-modal-title">
+      <div class="bdn-modal-header">
+        <div>
+          <div class="bdn-modal-title" id="bdn-modal-title"></div>
+          <div class="bdn-modal-subtitle" id="bdn-modal-subtitle"></div>
+        </div>
+        <button type="button" class="bdn-modal-close" aria-label="Close" onclick="bdnCloseModal()">&times;</button>
+      </div>
+      <div class="bdn-modal-body" id="bdn-modal-body"></div>
+    </div>
+  </div>
 
 </div>
 
@@ -526,69 +607,97 @@
     });
   });
 
-  function bdnBreakdownText(obj) {
-    var order = ['Jackson', 'Bellows', 'Shah', 'Wood', 'Uncommitted', 'Kleban', 'Costello', 'Dickerson', 'Cote', 'Leveille', 'Libby', 'Pelletier', 'Webb'];
-    var parts = [];
-    order.forEach(function(name) {
-      if (obj[name]) parts.push(name + ' ' + obj[name]);
-    });
-    for (var key in obj) {
-      if (order.indexOf(key) === -1 && obj[key]) parts.push(key + ' ' + obj[key]);
-    }
-    return parts.length ? parts.join(', ') : 'none yet';
-  }
-
   // ---- By-county breakdown ----
   var countyContainer = document.getElementById('bdn-counties');
   var countyNames = Object.keys(COUNTY_SUMMARY).sort();
-  countyNames.forEach(function(county, i) {
+  countyNames.forEach(function(county) {
     var d = COUNTY_SUMMARY[county];
     var done = d.delElected === d.delSlots && d.altElected === d.altSlots;
-
-    var row = document.createElement('div');
-    row.className = 'bdn-county-row';
-
-    var wrap = document.createElement('span');
-    wrap.className = 'bdn-info-wrap bdn-county-wrap';
 
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'bdn-county-btn';
-    var tipId = 'bdn-county-tip-' + i;
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-controls', tipId);
-    btn.onclick = function() { bdnToggleInfo(btn); };
+    btn.onclick = function() { bdnOpenCountyModal(county); };
 
-    var topRow = document.createElement('span');
-    topRow.className = 'bdn-county-toprow';
     var name = document.createElement('span');
     name.className = 'bdn-county-name';
     name.textContent = county;
     var value = document.createElement('span');
     value.className = 'bdn-county-value' + (done ? ' bdn-county-done' : '');
-    value.textContent = d.delElected + ' of ' + d.delSlots + ' delegates' + (done ? ' ✓' : '');
-    topRow.appendChild(name);
-    topRow.appendChild(value);
-    btn.appendChild(topRow);
+    value.textContent = d.delElected + '/' + d.delSlots + (done ? ' ✓' : '');
+    btn.appendChild(name);
+    btn.appendChild(value);
 
-    var tip = document.createElement('div');
-    tip.id = tipId;
-    tip.className = 'bdn-info-box';
-    tip.setAttribute('role', 'tooltip');
-    var p1 = document.createElement('p');
-    p1.innerHTML = '<strong>Delegates:</strong> ' + d.delElected + ' of ' + d.delSlots + ' seats filled (' + bdnBreakdownText(d.delBreakdown) + ')';
-    var p2 = document.createElement('p');
-    p2.innerHTML = '<strong>Alternates:</strong> ' + d.altElected + ' of ' + d.altSlots + ' seats filled (' + bdnBreakdownText(d.altBreakdown) + ')';
-    var p3 = document.createElement('p');
-    p3.innerHTML = '<strong>Filed:</strong> ' + d.filed + ' people ran as delegate candidates in ' + county + ' County';
-    tip.appendChild(p1);
-    tip.appendChild(p2);
-    tip.appendChild(p3);
+    countyContainer.appendChild(btn);
+  });
 
-    wrap.appendChild(btn);
-    wrap.appendChild(tip);
-    row.appendChild(wrap);
-    countyContainer.appendChild(row);
+  // ---- County delegate-roster modal ----
+  var modalBackdrop = document.getElementById('bdn-modal-backdrop');
+  var modalTitle = document.getElementById('bdn-modal-title');
+  var modalSubtitle = document.getElementById('bdn-modal-subtitle');
+  var modalBody = document.getElementById('bdn-modal-body');
+
+  function bdnPersonRow(p) {
+    var row = document.createElement('div');
+    row.className = 'bdn-modal-person';
+    var name = document.createElement('span');
+    name.className = 'bdn-modal-person-name';
+    name.textContent = p.f + ' ' + p.l;
+    var cand = document.createElement('span');
+    cand.className = 'bdn-modal-person-cand';
+    cand.textContent = p.cand;
+    row.appendChild(name);
+    row.appendChild(cand);
+    return row;
+  }
+
+  function bdnOpenCountyModal(county) {
+    var d = COUNTY_SUMMARY[county];
+    modalTitle.textContent = county + ' County';
+    modalSubtitle.textContent = d.delElected + ' of ' + d.delSlots + ' delegates, ' +
+      d.altElected + ' of ' + d.altSlots + ' alternates elected (' + d.filed + ' filed)';
+    modalBody.innerHTML = '';
+
+    var delegates = ALL_PEOPLE.filter(function(p) { return p.c === county && p.e && p.dt !== 'Alternate'; })
+      .sort(function(a, b) { return (a.l + a.f).localeCompare(b.l + b.f); });
+    var alternates = ALL_PEOPLE.filter(function(p) { return p.c === county && p.e && p.dt === 'Alternate'; })
+      .sort(function(a, b) { return (a.l + a.f).localeCompare(b.l + b.f); });
+
+    var delTitle = document.createElement('div');
+    delTitle.className = 'bdn-modal-group-title';
+    delTitle.textContent = 'Delegates';
+    modalBody.appendChild(delTitle);
+    if (delegates.length) {
+      delegates.forEach(function(p) { modalBody.appendChild(bdnPersonRow(p)); });
+    } else {
+      var empty1 = document.createElement('div');
+      empty1.className = 'bdn-modal-empty';
+      empty1.textContent = 'Not yet certified.';
+      modalBody.appendChild(empty1);
+    }
+
+    var altTitle = document.createElement('div');
+    altTitle.className = 'bdn-modal-group-title';
+    altTitle.textContent = 'Alternates';
+    modalBody.appendChild(altTitle);
+    if (alternates.length) {
+      alternates.forEach(function(p) { modalBody.appendChild(bdnPersonRow(p)); });
+    } else {
+      var empty2 = document.createElement('div');
+      empty2.className = 'bdn-modal-empty';
+      empty2.textContent = 'Not yet certified.';
+      modalBody.appendChild(empty2);
+    }
+
+    modalBackdrop.classList.add('bdn-modal-open');
+  }
+
+  function bdnCloseModal() {
+    modalBackdrop.classList.remove('bdn-modal-open');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') bdnCloseModal();
   });
 
   // ---- Delegate lookup ----
