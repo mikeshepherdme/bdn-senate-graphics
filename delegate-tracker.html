@@ -6,6 +6,7 @@
 <title>Who's winning Maine's 601-seat nominating convention</title>
 <style>
   .bdn-tracker-widget {
+    position: relative;
     font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
     max-width: 760px;
     margin: 0 auto;
@@ -16,6 +17,19 @@
     border-radius: 8px;
   }
   .bdn-tracker-widget * { box-sizing: border-box; }
+  .bdn-logo-badge {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  }
+  @media (max-width: 480px) {
+    .bdn-logo-badge { width: 28px; height: 28px; top: -12px; right: -12px; }
+  }
 
   .bdn-header {
     border-bottom: 3px solid #2d5a3d;
@@ -435,6 +449,7 @@
 </head>
 <body>
 <div class="bdn-tracker-widget">
+  <img class="bdn-logo-badge" src="data:image/png;base64,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" alt="Bangor Daily News">
 
   <div class="bdn-header">
     <div class="bdn-header-top">
@@ -489,7 +504,7 @@
     <div id="bdn-search-results" class="bdn-search-results"></div>
   </div>
 
-  <p class="bdn-source">Source: Bangor Daily News tabulation of county caucus results certified by the Maine Democratic Party.</p>
+  <p class="bdn-source">Source: Bangor Daily News tabulation of county caucus results certified by the Maine Democratic Party; candidate slates and interviews.</p>
 
   <div class="bdn-modal-backdrop" id="bdn-modal-backdrop" onclick="if (event.target === this) bdnCloseModal();">
     <div class="bdn-modal-card" role="dialog" aria-modal="true" aria-labelledby="bdn-modal-title">
