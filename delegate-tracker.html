@@ -180,26 +180,6 @@
     color: #999;
   }
 
-  .bdn-zero-note {
-    font-size: 12.5px;
-    color: #555;
-    background: #f4f6f4;
-    border-radius: 4px;
-    padding: 10px 12px;
-    line-height: 1.55;
-    margin-bottom: 0.7rem;
-  }
-  .bdn-zero-note strong { color: #1a1a1a; }
-  .bdn-zero-note:last-of-type { margin-bottom: 1rem; }
-
-  .bdn-counties-note {
-    font-size: 12px;
-    color: #555;
-    text-align: center;
-    margin: -0.3rem 0 1rem;
-  }
-  .bdn-counties-note strong { color: #2d5a3d; }
-
   .bdn-section-title {
     font-size: 11.5px;
     font-weight: 600;
@@ -302,49 +282,6 @@
   .bdn-modal-person-name { color: #1a1a1a; }
   .bdn-modal-person-cand { color: #555; white-space: nowrap; }
   .bdn-modal-empty { font-size: 13px; color: #777; padding: 6px 0; }
-
-  .bdn-search-input {
-    width: 100%;
-    font-size: 14px;
-    font-family: inherit;
-    padding: 9px 12px;
-    border: 1px solid #c7d0c8;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-  }
-  .bdn-search-input:focus { outline: 2px solid #2d5a3d; outline-offset: 1px; }
-  .bdn-search-hint { font-size: 12px; color: #777; margin: -4px 0 10px; }
-  .bdn-search-results { max-height: 380px; overflow-y: auto; }
-  .bdn-result-row {
-    border: 1px solid #e5e5e0;
-    border-radius: 6px;
-    padding: 8px 12px;
-    margin-bottom: 6px;
-  }
-  .bdn-result-row:last-child { margin-bottom: 0; }
-  .bdn-result-toprow {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .bdn-result-name { font-size: 13.5px; font-weight: 600; color: #1a1a1a; }
-  .bdn-result-meta { font-size: 12px; color: #666; margin-top: 2px; }
-  .bdn-badge {
-    display: inline-block;
-    font-size: 10.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    padding: 2px 7px;
-    border-radius: 9px;
-    white-space: nowrap;
-  }
-  .bdn-badge-delegate { background: #dcedd4; color: #1e5a2e; }
-  .bdn-badge-alternate { background: #e9f0ea; color: #2d5a3d; }
-  .bdn-badge-none { background: #f0f0ee; color: #888; }
 
   .bdn-view-toggle {
     display: flex;
@@ -470,7 +407,7 @@
 
   <div class="bdn-view-toggle" role="tablist">
     <button type="button" class="bdn-toggle-btn bdn-toggle-active" id="bdn-tab-statewide" role="tab" aria-selected="true" onclick="bdnShowView('statewide')">Statewide</button>
-    <button type="button" class="bdn-toggle-btn" id="bdn-tab-county" role="tab" aria-selected="false" onclick="bdnShowView('county')">By county &amp; lookup</button>
+    <button type="button" class="bdn-toggle-btn" id="bdn-tab-county" role="tab" aria-selected="false" onclick="bdnShowView('county')">By county</button>
   </div>
 
   <div id="bdn-view-statewide">
@@ -485,23 +422,11 @@
       <div id="bdn-bars"></div>
     </div>
 
-    <div class="bdn-zero-note">
-      <strong>Also elected as delegates:</strong> Kleban (0), Costello (0), Dickerson (0), Cote (0), Leveille (0), Libby (0), Pelletier (0), Webb (0).
-    </div>
-
-    <div class="bdn-zero-note">
-      <strong>Alternates elected so far (not counted above):</strong> Uncommitted (8), Bellows (4), Jackson (3), Shah (2).
-    </div>
   </div>
 
   <div id="bdn-view-county" style="display:none">
     <div class="bdn-section-title">Tap a county to see its delegates</div>
     <div id="bdn-counties" class="bdn-county-grid"></div>
-
-    <div class="bdn-section-title">Look up a delegate</div>
-    <input type="text" id="bdn-search" class="bdn-search-input" placeholder="Search by name or town&hellip;" autocomplete="off">
-    <div class="bdn-search-hint">Searches all 3,732 people who filed to run as a delegate, not just winners.</div>
-    <div id="bdn-search-results" class="bdn-search-results"></div>
   </div>
 
   <p class="bdn-source">Source: Bangor Daily News tabulation of county caucus results certified by the Maine Democratic Party; candidate slates and interviews.</p>
@@ -715,75 +640,6 @@
     if (e.key === 'Escape') bdnCloseModal();
   });
 
-  // ---- Delegate lookup ----
-  var searchInput = document.getElementById('bdn-search');
-  var resultsBox = document.getElementById('bdn-search-results');
-  var MAX_RESULTS = 30;
-
-  function bdnRenderResults(query) {
-    resultsBox.innerHTML = '';
-    query = query.trim().toLowerCase();
-    if (query.length < 2) {
-      return;
-    }
-    var matches = ALL_PEOPLE.filter(function(p) {
-      var full = (p.f + ' ' + p.l).toLowerCase();
-      return full.indexOf(query) !== -1 || (p.t && p.t.toLowerCase().indexOf(query) !== -1);
-    });
-
-    if (!matches.length) {
-      var none = document.createElement('div');
-      none.className = 'bdn-result-meta';
-      none.textContent = 'No matches.';
-      resultsBox.appendChild(none);
-      return;
-    }
-
-    matches.slice(0, MAX_RESULTS).forEach(function(p) {
-      var row = document.createElement('div');
-      row.className = 'bdn-result-row';
-
-      var top = document.createElement('div');
-      top.className = 'bdn-result-toprow';
-      var name = document.createElement('span');
-      name.className = 'bdn-result-name';
-      name.textContent = p.f + ' ' + p.l;
-      top.appendChild(name);
-
-      var badge = document.createElement('span');
-      if (p.e && p.dt === 'Alternate') {
-        badge.className = 'bdn-badge bdn-badge-alternate';
-        badge.textContent = 'Elected alternate';
-      } else if (p.e) {
-        badge.className = 'bdn-badge bdn-badge-delegate';
-        badge.textContent = 'Elected delegate';
-      } else {
-        badge.className = 'bdn-badge bdn-badge-none';
-        badge.textContent = 'Not yet elected';
-      }
-      top.appendChild(badge);
-      row.appendChild(top);
-
-      var meta = document.createElement('div');
-      meta.className = 'bdn-result-meta';
-      meta.textContent = (p.t ? p.t + ', ' : '') + p.c + ' County · Supports: ' + p.cand;
-      row.appendChild(meta);
-
-      resultsBox.appendChild(row);
-    });
-
-    if (matches.length > MAX_RESULTS) {
-      var more = document.createElement('div');
-      more.className = 'bdn-search-hint';
-      more.style.margin = '6px 0 0';
-      more.textContent = (matches.length - MAX_RESULTS) + ' more match' + (matches.length - MAX_RESULTS === 1 ? '' : 'es') + ' — refine your search to see them.';
-      resultsBox.appendChild(more);
-    }
-  }
-
-  searchInput.addEventListener('input', function() {
-    bdnRenderResults(searchInput.value);
-  });
 </script>
 
 </body>
