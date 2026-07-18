@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When Maine Democrats will pick their 500 caucus delegates</title>
+<style>
+  .bdn-caucus-widget {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1.1rem 1.25rem;
+    box-sizing: border-box;
+    color: #1a1a1a;
+    border: 2px solid #000;
+    border-radius: 8px;
+  }
+  .bdn-caucus-widget * { box-sizing: border-box; }
+
+  .bdn-header {
+    border-bottom: 3px solid #2d5a3d;
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+  .bdn-header-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .bdn-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .bdn-header-subhead {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .bdn-updated-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #2d5a3d;
+    background: #e9f0ea;
+    padding: 2px 9px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .bdn-caucus-days {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 1rem;
+  }
+  .bdn-day-card {
+    flex: 1 1 0;
+    min-width: 0;
+    background: #f4f6f4;
+    border: 1px solid #d6ddd6;
+    border-radius: 6px;
+    padding: 14px 14px 10px;
+  }
+  .bdn-day-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #2d5a3d;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+  }
+  .bdn-day-stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d5a3d;
+    line-height: 1.1;
+  }
+  .bdn-day-stat-pct {
+    font-size: 16px;
+    font-weight: 600;
+    color: #5c8a68;
+  }
+  .bdn-day-stat-label {
+    font-size: 12px;
+    color: #555;
+    margin: 2px 0 12px;
+    line-height: 1.35;
+  }
+
+  .bdn-county-row { margin-bottom: 9px; }
+  .bdn-county-row:last-of-type { margin-bottom: 0; }
+
+  .bdn-county-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+  }
+  .bdn-county-btn:focus-visible {
+    outline: 2px solid #2d5a3d;
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  .bdn-county-toprow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+  .bdn-county-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bdn-county-mid {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .bdn-county-time {
+    font-size: 10.5px;
+    color: #888;
+    white-space: nowrap;
+  }
+  .bdn-county-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+  }
+  .bdn-county-track {
+    display: block;
+    background: #eceae2;
+    border-radius: 4px;
+    height: 11px;
+    overflow: hidden;
+  }
+  .bdn-county-fill {
+    display: block;
+    height: 100%;
+    background: #2d5a3d;
+    border-radius: 4px;
+    min-width: 3px;
+  }
+
+  .bdn-axis {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #dde3dd;
+    padding-top: 4px;
+    margin-top: 10px;
+  }
+  .bdn-axis-tick {
+    font-size: 9.5px;
+    color: #999;
+  }
+
+  .bdn-info-wrap {
+    position: relative;
+    display: block;
+  }
+  .bdn-info-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    width: 250px;
+    max-width: 82vw;
+    font-size: 12px;
+    color: #444;
+    background: #fff;
+    border: 1px solid #d6ddd6;
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    padding: 10px 12px;
+    line-height: 1.5;
+    text-align: left;
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    pointer-events: none;
+  }
+  .bdn-info-box p { margin: 0 0 6px; }
+  .bdn-info-box p:last-child { margin-bottom: 0; }
+  .bdn-info-box strong { color: #2d5a3d; }
+  .bdn-info-wrap:hover .bdn-info-box,
+  .bdn-info-wrap:focus-within .bdn-info-box,
+  .bdn-info-box.bdn-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .bdn-legend {
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 0.9rem;
+  }
+
+  .bdn-source {
+    font-size: 10.5px;
+    color: #888;
+    margin: 0.2rem 0 0;
+  }
+
+  @media (max-width: 480px) {
+    .bdn-header-top { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .bdn-header h2 { font-size: 16px; }
+    .bdn-caucus-days { flex-direction: column; gap: 12px; }
+    .bdn-day-stat-num { font-size: 24px; }
+    .bdn-county-name { font-size: 12.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="bdn-caucus-widget">
+
+  <div class="bdn-header">
+    <div class="bdn-header-top">
+      <h2>When Maine Democrats will pick their 500 caucus delegates</h2>
+      <span class="bdn-updated-badge">Updated July 18, 2026</span>
+    </div>
+    <div class="bdn-header-subhead">Sixteen county caucuses over two days will elect the 500 delegates who join the 101 automatic members at the July 25 nominating convention in Bangor. Tap or hover any county below for its caucus method and location.</div>
+  </div>
+
+  <div class="bdn-caucus-days">
+    <div class="bdn-day-card">
+      <div class="bdn-day-title">Saturday, July 18</div>
+      <div class="bdn-day-stat-num">319 <span class="bdn-day-stat-pct">(53%)</span></div>
+      <div class="bdn-day-stat-label">of the convention's 601 total delegates</div>
+      <div id="bdn-sat-rows"></div>
+      <div class="bdn-axis">
+        <span class="bdn-axis-tick">0</span>
+        <span class="bdn-axis-tick">50</span>
+        <span class="bdn-axis-tick">100</span>
+        <span class="bdn-axis-tick">150</span>
+      </div>
+    </div>
+    <div class="bdn-day-card">
+      <div class="bdn-day-title">Sunday, July 19</div>
+      <div class="bdn-day-stat-num">181 <span class="bdn-day-stat-pct">(30%)</span></div>
+      <div class="bdn-day-stat-label">of the convention's 601 total delegates</div>
+      <div id="bdn-sun-rows"></div>
+      <div class="bdn-axis">
+        <span class="bdn-axis-tick">0</span>
+        <span class="bdn-axis-tick">50</span>
+        <span class="bdn-axis-tick">100</span>
+        <span class="bdn-axis-tick">150</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="bdn-source">Source: Maine Democratic Party press release, July 15, 2026; Bangor Daily News reporting.</p>
+
+</div>
+
+<script>
+  var SCALE_MAX = 150; // shared axis, both days -- Cumberland's 149 sets the ceiling
+
+  var saturday = [
+    { name: "Cumberland", count: 149, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." },
+    { name: "Penobscot", count: 44, time: "2 p.m.", method: "Virtual", detail: "Pre-verification 12:00 p.m.; meeting starts 2:00 p.m. Any verified voter may take part from home." },
+    { name: "Kennebec", count: 40, time: "12 p.m.", method: "In-person", detail: "Doors open 10:00 a.m.; meeting starts 12:00 p.m. Augusta Civic Center, 76 Community Dr, Augusta." },
+    { name: "Androscoggin", count: 31, time: "3 p.m.", method: "Virtual", detail: "Pre-verification 1:00 p.m.; meeting starts 3:00 p.m. Any verified voter may take part from home." },
+    { name: "Hancock", count: 23, time: "10 a.m.", method: "In-person", detail: "Doors open 8:00 a.m.; meeting starts 10:00 a.m. Ellsworth Elementary Middle School, 20 Forest Ave, Ellsworth." },
+    { name: "Lincoln", count: 15, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Wiscasset Middle High School, 225 Gardiner Rd, Wiscasset." },
+    { name: "Franklin", count: 9, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. University of Maine at Farmington, 246 Main St, Farmington." },
+    { name: "Washington", count: 8, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. Washington County Community College, 1 College Dr, Calais." }
+  ];
+
+  var sunday = [
+    { name: "York", count: 84, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. Sanford Performing Arts Center, 100 Alumni Blvd, Sanford." },
+    { name: "Knox", count: 18, time: "1 p.m.", method: "In-person", detail: "Doors open 11:00 a.m.; meeting starts 1:00 p.m. Oceanside High School, 400 Broadway, Rockland." },
+    { name: "Oxford", count: 17, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Oxford Hills High School, 256 Main St, South Paris." },
+    { name: "Sagadahoc", count: 16, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Mount Ararat High School, 73 Eagles Way, Topsham." },
+    { name: "Aroostook", count: 15, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." },
+    { name: "Waldo", count: 15, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." },
+    { name: "Somerset", count: 12, time: "2 p.m.", method: "In-person", detail: "Doors open 12:00 p.m.; meeting starts 2:00 p.m. Poulin Farm Red Barn Venue, 1112 Beckwith Rd, Cornville." },
+    { name: "Piscataquis", count: 4, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Central Hall, 152 East Main St, Dover-Foxcroft." }
+  ];
+
+  function renderDay(containerId, counties) {
+    var container = document.getElementById(containerId);
+    counties.forEach(function(c, i) {
+      var widthPct = Math.max((c.count / SCALE_MAX * 100), 1.5);
+      var tipId = containerId + '-tip-' + i;
+
+      var row = document.createElement('div');
+      row.className = 'bdn-county-row';
+
+      var wrap = document.createElement('span');
+      wrap.className = 'bdn-info-wrap';
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bdn-county-btn';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-controls', tipId);
+      btn.onclick = function() { bdnToggleInfo(btn); };
+
+      var topRow = document.createElement('span');
+      topRow.className = 'bdn-county-toprow';
+
+      var name = document.createElement('span');
+      name.className = 'bdn-county-name';
+      name.textContent = c.name;
+
+      var mid = document.createElement('span');
+      mid.className = 'bdn-county-mid';
+      var time = document.createElement('span');
+      time.className = 'bdn-county-time';
+      time.textContent = c.time;
+      var value = document.createElement('span');
+      value.className = 'bdn-county-value';
+      value.textContent = c.count;
+      mid.appendChild(time);
+      mid.appendChild(value);
+
+      topRow.appendChild(name);
+      topRow.appendChild(mid);
+
+      var track = document.createElement('span');
+      track.className = 'bdn-county-track';
+      var fill = document.createElement('span');
+      fill.className = 'bdn-county-fill';
+      fill.style.width = widthPct + '%';
+      track.appendChild(fill);
+
+      btn.appendChild(topRow);
+      btn.appendChild(track);
+
+      var tip = document.createElement('div');
+      tip.id = tipId;
+      tip.className = 'bdn-info-box';
+      tip.setAttribute('role', 'tooltip');
+      var methodP = document.createElement('p');
+      methodP.innerHTML = '<strong>Method:</strong> ' + c.method;
+      var locP = document.createElement('p');
+      locP.innerHTML = '<strong>Details:</strong> ' + c.detail;
+      tip.appendChild(methodP);
+      tip.appendChild(locP);
+
+      wrap.appendChild(btn);
+      wrap.appendChild(tip);
+      row.appendChild(wrap);
+      container.appendChild(row);
+    });
+  }
+
+  renderDay('bdn-sat-rows', saturday);
+  renderDay('bdn-sun-rows', sunday);
+
+  function bdnToggleInfo(btn) {
+    var wrap = btn.closest('.bdn-info-wrap');
+    var box = wrap.querySelector('.bdn-info-box');
+    var open = box.classList.toggle('bdn-open');
+    btn.setAttribute('aria-expanded', String(open));
+  }
+
+  document.addEventListener('click', function(e) {
+    document.querySelectorAll('.bdn-info-wrap').forEach(function(wrap) {
+      if (!wrap.contains(e.target)) {
+        var box = wrap.querySelector('.bdn-info-box');
+        box.classList.remove('bdn-open');
+        var btn = wrap.querySelector('.bdn-county-btn');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
