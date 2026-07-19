@@ -65,13 +65,43 @@
     border-radius: 6px;
     padding: 14px 14px 10px;
   }
+  .bdn-day-titlerow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
   .bdn-day-title {
     font-size: 12.5px;
     font-weight: 700;
     color: #2d5a3d;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    margin-bottom: 6px;
+  }
+  .bdn-day-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding: 2px 7px;
+    border-radius: 9px;
+    white-space: nowrap;
+  }
+  .bdn-day-badge-done {
+    color: #2d5a3d;
+    background: #dfeade;
+  }
+  .bdn-day-badge-today {
+    color: #8a5a00;
+    background: #fbe9c8;
+  }
+  .bdn-county-row.bdn-county-done .bdn-county-name::before {
+    content: "\2713  ";
+    color: #2d5a3d;
+  }
+  .bdn-county-row.bdn-county-done .bdn-county-fill {
+    background: #6b9a76;
   }
   .bdn-day-stat-num {
     font-size: 28px;
@@ -237,14 +267,17 @@
   <div class="bdn-header">
     <div class="bdn-header-top">
       <h2>When Maine Democrats will pick their 500 caucus delegates</h2>
-      <span class="bdn-updated-badge">Updated July 18, 2026</span>
+      <span class="bdn-updated-badge">Updated July 19, 2026</span>
     </div>
     <div class="bdn-header-subhead">Sixteen county caucuses over two days will elect the 500 delegates who join the 101 automatic members at the July 25 nominating convention in Bangor. Tap or hover any county below for its caucus method and location.</div>
   </div>
 
   <div class="bdn-caucus-days">
     <div class="bdn-day-card">
-      <div class="bdn-day-title">Saturday, July 18</div>
+      <div class="bdn-day-titlerow">
+        <div class="bdn-day-title">Saturday, July 18</div>
+        <span class="bdn-day-badge bdn-day-badge-done">&#10003; Complete</span>
+      </div>
       <div class="bdn-day-stat-num">319 <span class="bdn-day-stat-pct">(53%)</span></div>
       <div class="bdn-day-stat-label">of the convention's 601 total delegates</div>
       <div id="bdn-sat-rows"></div>
@@ -256,7 +289,10 @@
       </div>
     </div>
     <div class="bdn-day-card">
-      <div class="bdn-day-title">Sunday, July 19</div>
+      <div class="bdn-day-titlerow">
+        <div class="bdn-day-title">Sunday, July 19</div>
+        <span class="bdn-day-badge bdn-day-badge-today">Today</span>
+      </div>
       <div class="bdn-day-stat-num">181 <span class="bdn-day-stat-pct">(30%)</span></div>
       <div class="bdn-day-stat-label">of the convention's 601 total delegates</div>
       <div id="bdn-sun-rows"></div>
@@ -298,14 +334,14 @@
     { name: "Piscataquis", count: 4, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Central Hall, 152 East Main St, Dover-Foxcroft." }
   ];
 
-  function renderDay(containerId, counties) {
+  function renderDay(containerId, counties, done) {
     var container = document.getElementById(containerId);
     counties.forEach(function(c, i) {
       var widthPct = Math.max((c.count / SCALE_MAX * 100), 1.5);
       var tipId = containerId + '-tip-' + i;
 
       var row = document.createElement('div');
-      row.className = 'bdn-county-row';
+      row.className = 'bdn-county-row' + (done ? ' bdn-county-done' : '');
 
       var wrap = document.createElement('span');
       wrap.className = 'bdn-info-wrap';
@@ -366,8 +402,8 @@
     });
   }
 
-  renderDay('bdn-sat-rows', saturday);
-  renderDay('bdn-sun-rows', sunday);
+  renderDay('bdn-sat-rows', saturday, true);
+  renderDay('bdn-sun-rows', sunday, false);
 
   function bdnToggleInfo(btn) {
     var wrap = btn.closest('.bdn-info-wrap');
