@@ -422,6 +422,19 @@
       }
     });
   });
+
+  (function() {
+    if (window.self === window.top) return;
+    var widget = document.querySelector('.bdn-caucus-widget');
+    function sendHeight() {
+      var height = Math.ceil(widget.getBoundingClientRect().height) + 4;
+      window.parent.postMessage({ type: 'bdn-iframe-resize', height: height }, '*');
+    }
+    if (window.ResizeObserver) { new ResizeObserver(sendHeight).observe(widget); }
+    else { window.addEventListener('resize', sendHeight); }
+    window.addEventListener('load', sendHeight);
+    sendHeight();
+  })();
 </script>
 
 </body>
