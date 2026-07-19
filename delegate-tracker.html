@@ -361,9 +361,9 @@
   .bdn-info-box {
     position: absolute;
     top: 22px;
-    right: 0;
+    left: 0;
     width: 280px;
-    max-width: 78vw;
+    max-width: min(280px, calc(100vw - 24px));
     font-size: 12.5px;
     color: #555;
     background: #fff;
@@ -664,6 +664,29 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') bdnCloseModal();
   });
+
+  // ---- Keep the methodology tooltip on-screen regardless of where the "i"
+  // button lands in the wrapped subhead text (fixes overflow in narrow embeds) ----
+  (function() {
+    var box = document.getElementById('bdn-info-box');
+    var wrap = box ? box.closest('.bdn-info-wrap') : null;
+    if (!box || !wrap) return;
+    function position() {
+      box.style.left = '0px';
+      var boxWidth = box.offsetWidth;
+      var wrapRect = wrap.getBoundingClientRect();
+      var viewportWidth = document.documentElement.clientWidth;
+      var margin = 12;
+      var desiredLeft = wrapRect.left + wrapRect.width / 2 - boxWidth / 2;
+      var minLeft = margin;
+      var maxLeft = viewportWidth - boxWidth - margin;
+      var clampedLeft = Math.max(minLeft, Math.min(desiredLeft, maxLeft));
+      box.style.left = (clampedLeft - wrapRect.left) + 'px';
+    }
+    position();
+    window.addEventListener('resize', position);
+    window.addEventListener('load', position);
+  })();
 
   // ---- Report height to the parent page so an embedding <iframe> can auto-resize ----
   (function() {
