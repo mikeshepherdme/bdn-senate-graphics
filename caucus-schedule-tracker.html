@@ -313,25 +313,25 @@
   var SCALE_MAX = 150; // shared axis, both days -- Cumberland's 149 sets the ceiling
 
   var saturday = [
-    { name: "Cumberland", count: 149, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." },
-    { name: "Penobscot", count: 44, time: "2 p.m.", method: "Virtual", detail: "Pre-verification 12:00 p.m.; meeting starts 2:00 p.m. Any verified voter may take part from home." },
-    { name: "Kennebec", count: 40, time: "12 p.m.", method: "In-person", detail: "Doors open 10:00 a.m.; meeting starts 12:00 p.m. Augusta Civic Center, 76 Community Dr, Augusta." },
-    { name: "Androscoggin", count: 31, time: "3 p.m.", method: "Virtual", detail: "Pre-verification 1:00 p.m.; meeting starts 3:00 p.m. Any verified voter may take part from home." },
     { name: "Hancock", count: 23, time: "10 a.m.", method: "In-person", detail: "Doors open 8:00 a.m.; meeting starts 10:00 a.m. Ellsworth Elementary Middle School, 20 Forest Ave, Ellsworth." },
-    { name: "Lincoln", count: 15, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Wiscasset Middle High School, 225 Gardiner Rd, Wiscasset." },
     { name: "Franklin", count: 9, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. University of Maine at Farmington, 246 Main St, Farmington." },
-    { name: "Washington", count: 8, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. Washington County Community College, 1 College Dr, Calais." }
+    { name: "Washington", count: 8, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. Washington County Community College, 1 College Dr, Calais." },
+    { name: "Kennebec", count: 40, time: "12 p.m.", method: "In-person", detail: "Doors open 10:00 a.m.; meeting starts 12:00 p.m. Augusta Civic Center, 76 Community Dr, Augusta." },
+    { name: "Penobscot", count: 44, time: "2 p.m.", method: "Virtual", detail: "Pre-verification 12:00 p.m.; meeting starts 2:00 p.m. Any verified voter may take part from home." },
+    { name: "Androscoggin", count: 31, time: "3 p.m.", method: "Virtual", detail: "Pre-verification 1:00 p.m.; meeting starts 3:00 p.m. Any verified voter may take part from home." },
+    { name: "Lincoln", count: 15, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Wiscasset Middle High School, 225 Gardiner Rd, Wiscasset." },
+    { name: "Cumberland", count: 149, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." }
   ];
 
   var sunday = [
     { name: "York", count: 84, time: "11 a.m.", method: "In-person", detail: "Doors open 9:00 a.m.; meeting starts 11:00 a.m. Sanford Performing Arts Center, 100 Alumni Blvd, Sanford." },
     { name: "Knox", count: 18, time: "1 p.m.", method: "In-person", detail: "Doors open 11:00 a.m.; meeting starts 1:00 p.m. Oceanside High School, 400 Broadway, Rockland." },
+    { name: "Somerset", count: 12, time: "2 p.m.", method: "In-person", detail: "Doors open 12:00 p.m.; meeting starts 2:00 p.m. Poulin Farm Red Barn Venue, 1112 Beckwith Rd, Cornville." },
     { name: "Oxford", count: 17, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Oxford Hills High School, 256 Main St, South Paris." },
     { name: "Sagadahoc", count: 16, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Mount Ararat High School, 73 Eagles Way, Topsham." },
+    { name: "Piscataquis", count: 4, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Central Hall, 152 East Main St, Dover-Foxcroft." },
     { name: "Aroostook", count: 15, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." },
-    { name: "Waldo", count: 15, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." },
-    { name: "Somerset", count: 12, time: "2 p.m.", method: "In-person", detail: "Doors open 12:00 p.m.; meeting starts 2:00 p.m. Poulin Farm Red Barn Venue, 1112 Beckwith Rd, Cornville." },
-    { name: "Piscataquis", count: 4, time: "3 p.m.", method: "In-person", detail: "Doors open 1:00 p.m.; meeting starts 3:00 p.m. Central Hall, 152 East Main St, Dover-Foxcroft." }
+    { name: "Waldo", count: 15, time: "4 p.m.", method: "Virtual", detail: "Pre-verification 2:00 p.m.; meeting starts 4:00 p.m. Any verified voter may take part from home." }
   ];
 
   function renderDay(containerId, counties, done) {
